@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="Windows-1252"?>
+<generators>
+  <generator type="RedGate.SQLDataGenerator.ExpressionGenerators.Python.PythonScriptGenerator" name="Years of Service" description="0,1,23,2 (using IronPython)" category="Personal">
+    <property name="Code"># This example takes a column as a date of birth
+# Then work out a random number of years service
+# This if this is &gt; now the person is still working at this company
+def main(config):
+    dateOfBirth = InsertColumnName
+    workingAge = 18
+    age = (DateTime.Now - dateOfBirth).TotalDays/365 
+    numberofYearsWorking = age - workingAge
+
+    #Initialize Randomness only on the first row
+    if (config["row_count"] == 0):
+        # could use python random number generator
+        # and store the value in the config
+        session.SetupNormalGenerator(False, config["seed"], 1.0, 50, 10, 0.2)
+
+    
+    if (numberofYearsWorking &gt; 0) :
+        yearsOfService = session.GetNextRandomNumber()
+        if (yearsOfService &gt; numberofYearsWorking) :           
+            #Person still working at this country
+            return numberofYearsWorking
+        else:
+            return yearsOfService
+
+    return 0 #Too young
+</property>
+    <property name="ColumnType">nvarchar</property>
+    <type  type="string" />
+    <type type="Int16" />
+    <type type="Int64" /> 
+    <type type="Int32" /> 
+    <type type="Byte" /> 
+    <type sqlType="Boolean" />
+    <type type="Decimal" />
+    <type type="double" />
+  </generator>
+</generators>

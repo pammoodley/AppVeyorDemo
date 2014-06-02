@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="Windows-1252"?>
+<generators>
+  <generator type="RedGate.SQLDataGenerator.ExpressionGenerators.Python.CrossColumnExpressionGenerator" name="Age in Years" description="18.2,38.234,34.012" category="Cross Column">
+    <property name="Code">(DateTime.Now - InsertColumnName).TotalDays/365.25</property>
+    <type type="string" />
+    <type type="Int16" />
+    <type type="Int64" /> 
+    <type type="Int32" /> 
+    <type type="Byte" /> 
+    <type sqlType="Boolean" />
+    <type type="Decimal" />
+    <type type="double" />
+
+  </generator>
+</generators>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="Windows-1252"?>
+<generators>
+  <generator type="RedGate.SQLDataGenerator.ExpressionGenerators.Python.CrossColumnExpressionGenerator" name="Can Vote" description="True,False" category="Cross Column">
+    <property name="Code">(DateTime.Now - InsertColumnName ).TotalDays/365 &gt; 18</property>
+    <property name="ScriptPath" />
+    <type  type="String" />
+    <type sqlType="Boolean" />
+  </generator>
+</generators>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<generators>
+	<generator
+		type="RedGate.SQLDataGenerator.ExpressionGenerators.FileListGenerator"
+		name="UK County"
+		description="Cumberland, Cambridgeshire, Hertfordshire..."
+		category="Geographical">
+
+		<property name="FileName">UKCounty.txt</property>
+
+		<matches field="County" score="50" minlen="18"/>
+		<matches field="Addr.*3" score="40" minlen="18"/>		
+
+		<type type="string"/>
+	</generator>
+</generators>

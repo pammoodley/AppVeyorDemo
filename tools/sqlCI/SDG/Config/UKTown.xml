@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<generators>
+	<generator
+		type="RedGate.SQLDataGenerator.ExpressionGenerators.FileListGenerator"
+		name="UK Town"
+		description="Ascot, Ashford, Bangor..."
+		category="Geographical">
+
+		<property name="FileName">UKPostTown.txt</property>
+		<matches field="Post.*Town" score="50" minlen="13"/>
+		
+		<type type="string"/>
+	</generator>
+</generators>

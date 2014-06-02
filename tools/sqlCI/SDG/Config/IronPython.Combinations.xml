@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="Windows-1252"?><generators><generator type="RedGate.SQLDataGenerator.ExpressionGenerators.Python.PythonScriptGenerator" name="Initials (lowercase)" description="pq,be,ft... (using IronPython)" category="Personal">
+<property name="Code"># Combinatoric generator
+
+# The Python iteration and combinatorics library
+import itertools
+
+lowercase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".lower()
+
+def main(config):
+    return list(combinations())
+
+def combinations():
+    # Iterate over all pairs of letters in `lowercase`
+    for pair in itertools.combinations(lowercase, 2):
+        # and yield them as a string
+        yield "".join(pair)
+</property>
+<property name="ScriptPath" />
+<property name="ColumnType">nvarchar</property>
+<type sqlType="NVarchar" type="String" /></generator></generators>

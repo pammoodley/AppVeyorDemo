@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="Windows-1252"?>
+<generators>
+  <generator type="RedGate.SQLDataGenerator.ExpressionGenerators.Python.CrossColumnExpressionGenerator" name="Percentage of Two Columns" description="0,12,100,220,-5," category="Cross Column">
+    <property name="Code">(InsertColumnName / InsertColumnName ) * 100</property>
+    <type type="string" />
+    <type type="Int16" />
+    <type type="Int64" /> 
+    <type type="Int32" /> 
+    <type type="Byte" /> 
+    <type sqlType="Boolean" />
+    <type type="Decimal" />
+    <type type="double" />
+
+
+  </generator>
+</generators>

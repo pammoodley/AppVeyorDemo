@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="Windows-1252"?>
+<generators>
+<generator type="RedGate.SQLDataGenerator.ExpressionGenerators.Python.PythonScriptGenerator" name="ISO 639-3 (languages)" description="afa,alg,art (using IronPython)" category="Business">
+<property name="Code"># Make an HTTP request and read the output
+
+import clr
+clr.AddReference("System.Net")
+from System.Net import HttpWebRequest
+
+clr.AddReference("System")
+from System.IO import StreamReader
+
+# geonames list of iso-laguages 
+url = "http://download.geonames.org/export/dump/iso-languagecodes.txt"
+
+def main(config):
+    return list(read_wiki(column_size=config["column_size"]))
+
+def read_wiki(column_size=50):
+    # Create a CLR web request object
+    http = HttpWebRequest.Create(url)
+    http.Timeout = 5000
+    http.UserAgent = "Red Gate SQL Data Generator"
+    
+    # Read the response with a CLR StreamReader
+    response = http.GetResponse()
+    responseStream = StreamReader(response.GetResponseStream())
+    html = responseStream.ReadToEnd()
+    
+    # Yield all lines that start with a *,
+    # truncated to the column width
+    for line in html.splitlines():
+        if not line.startswith("ISO"):
+            items = line.split('\t')
+            yield items[0]  #ISO 639-3
+            #yield items[1]  #ISO 639-2
+            #yield items[2]  #ISO 639-1
+            #yield items[3]  #Language name
+            
+</property>
+<property name="ColumnType">nvarchar</property>
+<type sqlType="NVarchar" type="String" />
+</generator>
+</generators>

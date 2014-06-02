@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="Windows-1252"?><generators><generator type="RedGate.SQLDataGenerator.ExpressionGenerators.Python.PythonScriptGenerator" name="Book Titles (SQL)" description="SQL Server Hardware, Inside the SQL Server Query Optimizer (using IronPython)" category="Business">
+<property name="Code"># Read an XML file
+
+# Use the CLR XML libraries
+import clr
+clr.AddReference("System.Xml")
+from System.Xml.XPath import XPathDocument, XPathNavigator
+
+# A sample XML file 
+filename = r"BookStore.xml"
+
+def main(config):
+    filepath = config["config_path"] + "\\" + filename
+    return list(books(filepath, column_size=config["column_size"]))
+
+def books(filepath, column_size=50):
+    # Locate all titles of books in this document
+    doc = XPathDocument(filepath)
+    nav = doc.CreateNavigator()
+    expr = nav.Compile("/bookstore/book/title")
+    titles = nav.Select(expr)
+
+    for title in titles:
+        # Truncate titles to the column size before yield
+        yield str(title)[:column_size]
+</property>
+<property name="ColumnType">nvarchar</property>
+<type sqlType="NVarchar" type="String" />
+</generator>
+</generators>

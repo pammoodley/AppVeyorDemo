@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="Windows-1252"?>
+<generators>
+  <generator type="RedGate.SQLDataGenerator.ExpressionGenerators.Python.PythonScriptGenerator" name="City from State or Region" description="Generates city names from states or regions" category="Cross Column">
+    <property name="UserControl">RedGate.SQLDataGenerator.ExpressionGenerators.Python.PythonGeneratorUI</property>
+    <property name="Code"># This script generates city names based on values in a state or region column
+# The script uses a CSV file from the SQL Data Generator installation directory
+# If you want to customize the list cities and regions, specify your own CSV file
+
+import csv
+
+def main(config):
+	# Load the cities and states into the dictionary
+	# To customize the cities and regions that are generated, replace this file with your own
+	config_location = config["config_path"]
+	city_states_file_path = config_location + "\\USCitiesAndStates.csv"
+	cities_states = {}
+	csv_file = csv.DictReader(open(city_states_file_path,'rb'),delimiter=',')
+	for city_state_pair in csv_file:
+		if cities_states.has_key(city_state_pair['State']):
+			cities_states[city_state_pair['State']].append(city_state_pair['City'])
+		else:
+			cities_states[city_state_pair['State']] = [city_state_pair['City']]
+
+		# Select a city at random which matches the Region column
+		#  Specify the name of your state or region column here
+		if cities_states.has_key(Region):
+			cities = cities_states[Region]
+			city = random.choice(cities)
+			return city
+		# If the region doesn't exist return a valid value
+		else:
+			return "Springfield"
+    </property>
+    <property name="ColumnType">nvarchar</property>
+    <type sqlType="NVarchar" type="String" />
+  </generator>
+</generators>

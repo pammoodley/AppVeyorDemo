@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="Windows-1252"?>
+<generators>
+  <generator type="RedGate.SQLDataGenerator.Generators.List.WeightedListGenerator" name="Bit Weighted List" description="TRUE or FALSE (even distribution)" category="Personal">
+    <property name="ListItems">
+      <WeightedListOfItems type="WeightedListOfItems" version="1">
+        <value version="1" type="WeightedListItem">
+          <Name>True</Name>
+          <Weight>50</Weight>
+        </value>
+        <value version="1" type="WeightedListItem">
+          <Name>False</Name>
+          <Weight>50</Weight>
+        </value>
+      </WeightedListOfItems>
+    </property>
+    <matches field=".*" score="10"/>
+    <type sqlType="Boolean" />
+    <type sqlType="bit" />
+    
+  </generator>
+</generators>

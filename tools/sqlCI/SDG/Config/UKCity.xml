@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<generators>
+	<generator
+		type="RedGate.SQLDataGenerator.ExpressionGenerators.FileListGenerator"
+		name="UK City"
+		description="London, Cambridge, Birmingham..."
+		category="Geographical">
+
+		<property name="FileName">UKCity.txt</property>
+
+		<matches field="City" score="49" minlen="19"/>
+		<matches field="Addr.*2" score="39" minlen="19"/>
+		<matches field="Addr.*[34]" score="24" minlen="19"/>
+
+		<type type="string"/>
+	</generator>
+</generators>

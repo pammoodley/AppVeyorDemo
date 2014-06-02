@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="Windows-1252"?>
+<generators>
+  <generator type="RedGate.SQLDataGenerator.ExpressionGenerators.Python.PythonScriptGenerator" name="First Name from Title" description="Generates first names from titles" category="Cross Column">
+    <property name="UserControl">RedGate.SQLDataGenerator.ExpressionGenerators.Python.PythonGeneratorUI</property>
+    <property name="Code"># This script generates male or female first names based on values in a title column
+# To use this script there must be another column in the table that contains title values (eg Mr, Miss, Dr)
+# You can specify the name of your title column in the 'if' statements below
+
+# Load the names into a list
+def LoadList(name_filepath):
+    name_list = []
+    names = open(name_filepath, 'r')
+    for line in names:
+        name_list.append(line.strip())
+    names.close();
+    return name_list
+
+def main(config):
+    config_location = config["config_path"]
+    male_name_filepath = config_location + "\\NamesFirstMale.txt"
+    female_name_filepath = config_location + "\\NamesFirstFemale.txt"
+
+    # Load the names
+    male_name_list = LoadList(male_name_filepath)
+    female_name_list = LoadList(female_name_filepath)
+
+    # Specify the name of your title column here
+    if Title == 'Mr' or Title == 'Mr.':
+            return random.choice(male_name_list)
+    elif Title == 'Dr' or Title == 'Dr.':
+        if random.randint(0, 1) == 0:
+            return random.choice(male_name_list)
+        else:
+            return random.choice(female_name_list)
+    else:
+        return random.choice(female_name_list)
+    </property>
+    <property name="ColumnType">nvarchar</property>
+      <type sqlType="NVarchar" type="String" />
+    </generator>
+</generators>

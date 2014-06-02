@@ -1,0 +1,57 @@
+London
+Birmingham
+Liverpool
+Leeds
+Sheffield
+Bristol
+Manchester
+Leicester
+Coventry
+Kingston upon Hull
+Bradford
+Stoke-on-Trent
+Wolverhampton
+Nottingham
+Plymouth
+Southampton
+Reading
+Derby
+Dudley
+Newcastle upon Tyne
+Northampton
+Portsmouth
+Luton
+Preston
+Milton Keynes
+Sunderland
+Norwich
+Walsall
+Bournemouth
+Southend-on-Sea
+Swindon
+Huddersfield
+Poole
+Oxford
+Middlesbrough
+Blackpool
+Bolton
+Ipswich
+Telford
+York
+West Bromwich
+Peterborough
+Stockport
+Brighton
+Slough
+Gloucester
+Watford
+Rotherham
+Cambridge
+Exeter
+Eastbourne
+Sutton Coldfield
+Blackburn
+Colchester
+Oldham
+St Helens
+Crawley
