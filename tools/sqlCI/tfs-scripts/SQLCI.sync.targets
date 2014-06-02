@@ -1,0 +1,38 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="default" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  
+	<Import Project="$(SQLCI_global_file)"/>  
+    <Import Project="$(SQLCI_properties_file)"/>  
+	
+	<PropertyGroup>
+      <sqlCI_options>sync</sqlCI_options>
+	  <sqlCI_options>$(sqlCI_options) /databaseServer="$(databaseServer)"</sqlCI_options>
+	  <sqlCI_options Condition="'$(databaseUserName)' != ''">$(sqlCI_options) /databaseUserName="$(databaseUserName)"</sqlCI_options>
+	  <sqlCI_options Condition="'$(databasePassword)' != ''">$(sqlCI_options) /databasePassword="$(databasePassword)"</sqlCI_options>
+	  <package>$(packageId).$(buildNumber).nupkg</package>
+	  <package Condition="'$(packageFolder)' != ''">$(packageFolder)\$(package)</package>
+	  <sqlCI_options>$(sqlCI_options) /package="$(package)"</sqlCI_options>
+	  <sqlCI_options>$(sqlCI_options) /databaseName="$(databaseName)"</sqlCI_options>
+	  <sqlCI_options Condition="'$(licenseSerialKey)' != ''">$(sqlCI_options) /licenseSerialKey="$(licenseSerialKey)"</sqlCI_options>
+	  <sqlCI_options Condition="'$(additionalCompareArgs)' != ''">$(sqlCI_options) /additionalCompareArgs="$(additionalCompareArgs)"</sqlCI_options>
+	  <sqlCI>set REDGATE_SEND_ERROR_REPORTS=true &amp; set RUNNING_IN_MSBUILD=true &amp; "$(sqlCIexe)" $(sqlCI_options)</sqlCI>
+	</PropertyGroup>
+	
+	<Target Name="default">
+			<CallTarget Targets="sqlCI_sync" Condition="'$(disabled.ToUpper())' != 'TRUE'"/>
+			<Message Text="Skipping $(SQLCI_properties_file): disabled is set to true." Condition="'$(disabled.ToUpper())' == 'TRUE'" Importance="high"/>
+	</Target>
+	
+  <Target Name="sqlCI_sync">
+	<Message Text="Running SQLCI sync for properties file $(SQLCI_properties_file)"  Importance="high"/>
+	<Error Condition="'$(databaseServer)' == ''" Text="You must specify a database server" />
+	<Error Condition="'$(databaseName)' == ''" Text="You must specify a database name" />
+	<Error Condition="'$(packageId)' == ''" Text="You must specify a package id" />
+	<Error Condition="'$(buildNumber)' == ''" Text="You must update the .xaml file so that TFS passes the build number to MsBuild see http://efkldj" />
+	<Error Condition="'$(sqlCIexe)' == ''" Text="You must specify the location of sqlCI.exe" />
+	
+    <Message Text="Starting: $(sqlCI)" />
+    
+	<Exec Command="$(sqlCI)"/>
+  </Target>
+</Project>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="build;test;sync;publish" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+		<SQLCI_build_files Include=".\SQLCI-steps\*SQLCI.build.properties"/>
+	</ItemGroup>
+	
+	<ItemGroup>
+		<SQLCI_test_files Include=".\SQLCI-steps\*SQLCI.test.properties"/>
+	</ItemGroup>
+	
+	<ItemGroup>
+		<SQLCI_sync_files Include=".\SQLCI-steps\*SQLCI.sync.properties"/>
+	</ItemGroup>
+	
+	<ItemGroup>
+		<SQLCI_publish_files Include=".\SQLCI-steps\*SQLCI.publish.properties"/>
+	</ItemGroup>
+	
+	<PropertyGroup>
+		<SQLCI_global_file>.\SQLCI-steps\SQLCI.global.properties</SQLCI_global_file>
+	</PropertyGroup>
+	
+  <Target Name="build" Outputs="%(SQLCI_build_files.Identity)">
+	<MSBuild Condition="'%(SQLCI_build_files.Identity)' != ''" Projects="SQLCI.build.targets" Properties="SQLCI_properties_file=%(SQLCI_build_files.Identity);SQLCI_global_file=$(SQLCI_global_file)"/>
+  </Target>
+  
+  <Target Name="test" Outputs="%(SQLCI_test_files.Identity)">
+	<MSBuild Condition="'%(SQLCI_test_files.Identity)' != ''" Projects="SQLCI.test.targets" Properties="SQLCI_properties_file=%(SQLCI_test_files.Identity);SQLCI_global_file=$(SQLCI_global_file)"/>
+  </Target>
+  
+  <Target Name="sync" Outputs="%(SQLCI_sync_files.Identity)">
+	<MSBuild Condition="'%(SQLCI_sync_files.Identity)' != ''" Projects="SQLCI.sync.targets" Properties="SQLCI_properties_file=%(SQLCI_sync_files.Identity);SQLCI_global_file=$(SQLCI_global_file)"/>
+  </Target>
+  
+  <Target Name="publish" Outputs="%(SQLCI_publish_files.Identity)">
+	<MSBuild Condition="'%(SQLCI_publish_files.Identity)' != ''" Projects="SQLCI.publish.targets" Properties="SQLCI_properties_file=%(SQLCI_publish_files.Identity);SQLCI_global_file=$(SQLCI_global_file)"/>
+  </Target>
+</Project>

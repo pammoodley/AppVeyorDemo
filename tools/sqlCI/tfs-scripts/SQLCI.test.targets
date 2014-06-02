@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="default" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+	<Import Project="$(SQLCI_global_file)"/>  
+    <Import Project="$(SQLCI_properties_file)"/>  
+	
+	<PropertyGroup>
+      <sqlCI_options>test</sqlCI_options>
+	  <sqlCI_options>$(sqlCI_options) /temporaryDatabaseServer="$(temporaryDatabaseServer)"</sqlCI_options>
+	  <sqlCI_options Condition="'$(temporaryDatabaseUserName)' != ''">$(sqlCI_options) /temporaryDatabaseUserName="$(temporaryDatabaseUserName)"</sqlCI_options>
+	  <sqlCI_options Condition="'$(temporaryDatabasePassword)' != ''">$(sqlCI_options) /temporaryDatabasePassword="$(temporaryDatabasePassword)"</sqlCI_options>
+	  <package>$(packageId).$(buildNumber).nupkg</package>
+	  <package Condition="'$(packageFolder)' != ''">$(packageFolder)\$(package)</package>
+	  <sqlCI_options>$(sqlCI_options) /package="$(package)"</sqlCI_options>
+	  <sqlCI_options Condition="'$(outputFolder)' != ''">$(sqlCI_options) /outputFolder="$(outputFolder)"</sqlCI_options>
+	  <sqlCI_options Condition="'$(licenseSerialKey)' != ''">$(sqlCI_options) /licenseSerialKey="$(licenseSerialKey)"</sqlCI_options>
+	  <sqlCI_options Condition="'$(licenseSerialKey)' != ''">$(sqlCI_options) /licenseSerialKey="$(licenseSerialKey)"</sqlCI_options>
+	  <sqlCI_options Condition="'$(generateTestData.ToUpper())' == 'TRUE'">$(sqlCI_options) /sqlDataGenerator</sqlCI_options>
+	  <sqlCI_options Condition="'$(generateTestData.ToUpper())' == 'TRUE' AND '$(dataGeneratorProjectFile)' != ''">$(sqlCI_options)="$(dataGeneratorProjectFile)"</sqlCI_options>
+	  <sqlCI_options Condition="'$(additionalCompareArgs)' != ''">$(sqlCI_options) /additionalCompareArgs="$(additionalCompareArgs)"</sqlCI_options>
+	  <sqlCI>set REDGATE_SEND_ERROR_REPORTS=true &amp; set RUNNING_IN_MSBUILD=true &amp; "$(sqlCIexe)" $(sqlCI_options)</sqlCI>
+	</PropertyGroup>
+	
+	<Target Name="default">
+			<CallTarget Targets="sqlCI_test" Condition="'$(disabled.ToUpper())' != 'TRUE'"/>
+			<Message Text="Skipping $(SQLCI_properties_file): disabled is set to true." Condition="'$(disabled.ToUpper())' == 'TRUE'" Importance="high"/>
+	</Target>
+	
+  <Target Name="sqlCI_test">
+	<Message Text="Running SQLCI test for properties file $(SQLCI_properties_file)"  Importance="high"/>
+	<Error Condition="'$(temporaryDatabaseServer)' == ''" Text="You must specify a temporary database server" />
+	<Error Condition="'$(packageId)' == ''" Text="You must specify a package id" />
+	<Error Condition="'$(buildNumber)' == ''" Text="You must update the .xaml file so that TFS passes the build number to MsBuild see http://efkldj" />
+	<Error Condition="'$(sqlCIexe)' == ''" Text="You must specify the location of sqlCI.exe" />
+	
+    <Message Text="Starting: $(sqlCI)" />
+    
+	<Exec Command="$(sqlCI)"/>
+  </Target>
+</Project>
