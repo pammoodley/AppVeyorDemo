@@ -4,7 +4,7 @@ SET ANSI_NULLS ON
 GO
 --  Comments here are associated with the test.
 --  For test case examples, see: http://tsqlt.org/user-guide/tsqlt-tutorial/
-CREATE PROCEDURE [UnitTests].[test People]
+CREATE PROCEDURE [UnitTests].[test ViewPeople]
 AS
 BEGIN
 	IF OBJECT_ID('actual') IS NOT NULL DROP TABLE actual;
