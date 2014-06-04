@@ -1,4 +1,4 @@
-[xml]$testResults = Get-Content "$(APPVEYOR_BUILD_FOLDER)*.junit.xml"
+[xml]$testResults = Get-Content "$($env:APPVEYOR_BUILD_FOLDER)\*.junit.xml"
 
 foreach ($testCase in $testResults.testsuites.testsuite.testcase) {
   echo $testCase.classname

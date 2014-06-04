@@ -9,13 +9,12 @@
 	  <sqlCI_options>$(sqlCI_options) /databaseServer="$(databaseServer)"</sqlCI_options>
 	  <sqlCI_options Condition="'$(databaseUserName)' != ''">$(sqlCI_options) /databaseUserName="$(databaseUserName)"</sqlCI_options>
 	  <sqlCI_options Condition="'$(databasePassword)' != ''">$(sqlCI_options) /databasePassword="$(databasePassword)"</sqlCI_options>
-	  <package>$(packageId).$(buildNumber).nupkg</package>
-	  <package Condition="'$(packageFolder)' != ''">$(packageFolder)\$(package)</package>
 	  <sqlCI_options>$(sqlCI_options) /package="$(package)"</sqlCI_options>
 	  <sqlCI_options>$(sqlCI_options) /databaseName="$(databaseName)"</sqlCI_options>
 	  <sqlCI_options Condition="'$(licenseSerialKey)' != ''">$(sqlCI_options) /licenseSerialKey="$(licenseSerialKey)"</sqlCI_options>
 	  <sqlCI_options Condition="'$(additionalCompareArgs)' != ''">$(sqlCI_options) /additionalCompareArgs="$(additionalCompareArgs)"</sqlCI_options>
-	  <sqlCI>set REDGATE_SEND_ERROR_REPORTS=true &amp; set RUNNING_IN_MSBUILD=true &amp; "$(sqlCIexe)" $(sqlCI_options)</sqlCI>
+	  <sqlCI>set RUNNING_IN_MSBUILD=true &amp; "$(sqlCIexe)" $(sqlCI_options)</sqlCI>
+	  <sqlCI Condition="'$(sendErrorReports.ToUpper())' == 'TRUE'">set REDGATE_SEND_ERROR_REPORTS=true &amp; $(sqlCI)</sqlCI>
 	</PropertyGroup>
 	
 	<Target Name="default">
@@ -25,13 +24,16 @@
 	
   <Target Name="sqlCI_sync">
 	<Message Text="Running SQLCI sync for properties file $(SQLCI_properties_file)"  Importance="high"/>
-	<Error Condition="'$(databaseServer)' == ''" Text="You must specify a database server" />
-	<Error Condition="'$(databaseName)' == ''" Text="You must specify a database name" />
-	<Error Condition="'$(packageId)' == ''" Text="You must specify a package id" />
-	<Error Condition="'$(buildNumber)' == ''" Text="You must update the .xaml file so that TFS passes the build number to MsBuild see http://efkldj" />
-	<Error Condition="'$(sqlCIexe)' == ''" Text="You must specify the location of sqlCI.exe" />
 	
-    <Message Text="Starting: $(sqlCI)" />
+	<Error Condition="'$(databaseServer)' == ''" Text="Invalid Property: databaseServer, properties file: $(SQLCI_properties_file), global properties file: $(SQLCI_global_file). You must specify the target database server name that you want to update after every build." />
+	<Error Condition="'$(databaseName)' == ''" Text="Invalid Property: databaseName, properties file: $(SQLCI_properties_file), global properties file: $(SQLCI_global_file). You must specify the database name that you want to update after every build." />
+	<Error Condition="'$(buildNumber)' == ''" Text="Invalid Property: buildNumber, properties file: $(SQLCI_properties_file), global properties file: $(SQLCI_global_file). You must specify a build number and update the TFS build's .xaml file so the TFS parameters are passed to MsBuild. See Passing the $BuildNumber variable to MSBuild using TFS (www.red-gate.com/sqlci/tfs/buildnumber)"/>	
+	<Error Condition="'$(package)' == ''" Text="Invalid Property: package, properties file: $(SQLCI_properties_file), global properties file: $(SQLCI_global_file). You must specify the SQLCI package you want to sync." />
+
+	<Error Condition="'$(sqlCIexe)' == ''" Text="Invalid Property: sqlCIexe, properties file: $(SQLCI_properties_file), global properties file: $(SQLCI_global_file). You must specify the path to the sqlCI.exe file installed with the Red Gate Automation Pack. The default install location is C:\Program Files (x86)\Red Gate\SQL Automation Pack 1\sqlCI\sqlCI.exe." />
+	<Error Condition="!Exists('$(sqlCIexe)')" Text="Invalid Property: sqlCIexe, properties file: $(SQLCI_properties_file), global properties file: $(SQLCI_global_file). The file $(sqlCIexe) does not exist or the path to the file is incorrect." />
+    
+	<Message Text="Starting: $(sqlCI)" />
     
 	<Exec Command="$(sqlCI)"/>
   </Target>

@@ -172,3 +172,8 @@ UpgradeLog*.htm
 
 # Microsoft Fakes
 FakesAssemblies/
+*.junit.xml,*.nupkg
+tools/database.1.0.0.nupkg
+tools/database.1.0.0reports.junit.xml
+tools/database.1.0.1.nupkg
+tools/database.1.0.1reports.junit.xml

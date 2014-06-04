@@ -9,13 +9,14 @@
 	  <sqlCI_options>$(sqlCI_options) /temporaryDatabaseServer="$(temporaryDatabaseServer)"</sqlCI_options>
 	  <sqlCI_options Condition="'$(temporaryDatabaseUserName)' != ''">$(sqlCI_options) /temporaryDatabaseUserName="$(temporaryDatabaseUserName)"</sqlCI_options>
 	  <sqlCI_options Condition="'$(temporaryDatabasePassword)' != ''">$(sqlCI_options) /temporaryDatabasePassword="$(temporaryDatabasePassword)"</sqlCI_options>
-	  <sqlCI_options>$(sqlCI_options) /scriptsFolder="$(scriptsFolder)"</sqlCI_options>
+	  <sqlCI_options>$(sqlCI_options) /scriptsFolder="$(scriptsFolder)/"</sqlCI_options>
 	  <sqlCI_options>$(sqlCI_options) /packageId="$(packageId)"</sqlCI_options>
 	  <sqlCI_options>$(sqlCI_options) /packageVersion="$(buildNumber)"</sqlCI_options>
 	  <sqlCI_options Condition="'$(outputFolder)' != ''">$(sqlCI_options) /outputFolder="$(outputFolder)"</sqlCI_options>
 	  <sqlCI_options Condition="'$(licenseSerialKey)' != ''">$(sqlCI_options) /licenseSerialKey="$(licenseSerialKey)"</sqlCI_options>
 	  <sqlCI_options Condition="'$(additionalCompareArgs)' != ''">$(sqlCI_options) /additionalCompareArgs="$(additionalCompareArgs)"</sqlCI_options>
-	  <sqlCI>set REDGATE_SEND_ERROR_REPORTS=true &amp; set RUNNING_IN_MSBUILD=true &amp; "$(sqlCIexe)" $(sqlCI_options)</sqlCI>
+	  <sqlCI>set RUNNING_IN_MSBUILD=true &amp; "$(sqlCIexe)" $(sqlCI_options)</sqlCI>
+	  <sqlCI Condition="'$(sendErrorReports.ToUpper())' == 'TRUE'">set REDGATE_SEND_ERROR_REPORTS=true &amp; $(sqlCI)</sqlCI>
 	</PropertyGroup>
 	
 	<Target Name="default">
@@ -26,11 +27,12 @@
   <Target Name="sqlCI_build">
 	<Message Text="Running SQLCI build for properties file $(SQLCI_properties_file)"  Importance="high"/>
 	
-	<Error Condition="'$(temporaryDatabaseServer)' == ''" Text="You must specify a temporary database server" />
-	<Error Condition="'$(scriptsFolder)' == ''" Text="You must specify the location of your SQL sourced controlled database scripts folder" />
-	<Error Condition="'$(packageId)' == ''" Text="You must specify a package id" />
-	<Error Condition="'$(buildNumber)' == ''" Text="You must update the .xaml file so that TFS passes the build number to MsBuild see http://efkldj" />
-	<Error Condition="'$(sqlCIexe)' == ''" Text="You must specify the location of sqlCI.exe" />
+	<Error Condition="'$(temporaryDatabaseServer)' == ''" Text="Invalid Property: temporaryDatabaseServer, properties file: $(SQLCI_properties_file), global properties file: $(SQLCI_global_file). The SQL CI needs to recreate your database on a temporary database server. Enter the database server name." />
+	<Error Condition="'$(scriptsFolder)' == ''" Text="Invalid Property: scriptsFolder, properties file: $(SQLCI_properties_file), global properties file: $(SQLCI_global_file). You must specify the path to the database scripts folder committed to SQL Source Control." />
+	<Error Condition="'$(packageId)' == ''" Text="Invalid Property: packageId, properties file: $(SQLCI_properties_file), global properties file: $(SQLCI_global_file). You must specify a package ID so that SQL CI knows what name to give to the package you're creating. The ID must not contain spaces." />
+	<Error Condition="'$(buildNumber)' == ''" Text="Invalid Property: buildNumber, properties file: $(SQLCI_properties_file), global properties file: $(SQLCI_global_file). You must specify a build number and update the TFS build's .xaml file so the TFS parameters are passed to MsBuild. See Passing the $BuildNumber variable to MSBuild using TFS (www.red-gate.com/sqlci/tfs/buildnumber)"/>
+	<Error Condition="'$(sqlCIexe)' == ''" Text="Invalid Property: sqlCIexe, properties file: $(SQLCI_properties_file), global properties file: $(SQLCI_global_file). You must specify the path to the sqlCI.exe file installed with the Red Gate Automation Pack. The default install location is C:\Program Files (x86)\Red Gate\SQL Automation Pack 1\sqlCI\sqlCI.exe." />
+	<Error Condition="!Exists('$(sqlCIexe)')" Text="Invalid Property: sqlCIexe, properties file: $(SQLCI_properties_file), global properties file: $(SQLCI_global_file). The file $(sqlCIexe) does not exist or the path to the file is incorrect." />
 	
     <Message Text="Starting: $(sqlCI)" />
     
