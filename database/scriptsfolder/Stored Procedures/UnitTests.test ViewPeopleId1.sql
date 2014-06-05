@@ -1,3 +1,4 @@
+
 SET QUOTED_IDENTIFIER ON
 GO
 SET ANSI_NULLS ON
@@ -8,21 +9,17 @@ GO
 CREATE PROCEDURE [UnitTests].[test ViewPeopleId]
 AS
 BEGIN
-	IF OBJECT_ID('actual') IS NOT NULL DROP TABLE actual;
-	IF OBJECT_ID('expected') IS NOT NULL DROP TABLE expected;
-
+	
 	EXEC tSQLt.FakeTable 'dbo', 'People';
 	INSERT INTO dbo.People (id, name) VALUES (1, 'Jon');
+	DECLARE @actual INT;
 
-  
-	SELECT * INTO expected FROM dbo.People;
-	SELECT * INTO actual FROM dbo.ViewPeopleId;
+	SELECT @actual = id FROM dbo.ViewPeopleId;
 
-	EXEC tSQLt.AssertEqualsTable 'expected', 'actual';
+	EXEC tSQLt.AssertEquals 1, @actual;
 
 
 END;
-
 
 
 
