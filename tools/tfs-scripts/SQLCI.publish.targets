@@ -3,17 +3,8 @@
   
 	<Import Project="$(SQLCI_global_file)"/>  
     <Import Project="$(SQLCI_properties_file)"/>  
-	
-	<PropertyGroup>
-      <sqlCI_options>publish</sqlCI_options>
-	  <sqlCI_options>$(sqlCI_options) /package="$(package)"</sqlCI_options>
-	  <sqlCI_options Condition="'$(nugetFeedApiKey)' != ''">$(sqlCI_options) /nugetFeedApiKey="$(nugetFeedApiKey)"</sqlCI_options>
-	  <sqlCI_options>$(sqlCI_options) /nugetFeedUrl="$(nugetFeedUrl)"</sqlCI_options>
-	  <sqlCI_options Condition="'$(licenseSerialKey)' != ''">$(sqlCI_options) /licenseSerialKey="$(licenseSerialKey)"</sqlCI_options>	  
-	  <sqlCI>set RUNNING_IN_MSBUILD=true &amp; "$(sqlCIexe)" $(sqlCI_options)</sqlCI>
-	  <sqlCI Condition="'$(sendErrorReports.ToUpper())' == 'TRUE'">set REDGATE_SEND_ERROR_REPORTS=true &amp; $(sqlCI)</sqlCI>
-	</PropertyGroup>
-	
+    <UsingTask TaskName="SQLCIPublish" AssemblyFile="$(sqlCIFolder)/sqlCI.exe"/>
+		
 	<Target Name="default">
 			<CallTarget Targets="sqlCI_publish" Condition="'$(disabled.ToUpper())' != 'TRUE'"/>
 			<Message Text="Skipping $(SQLCI_properties_file): disabled is set to true." Condition="'$(disabled.ToUpper())' == 'TRUE'" Importance="high"/>
@@ -22,15 +13,10 @@
   <Target Name="sqlCI_publish">
 	<Message Text="Running SQLCI publish for properties file $(SQLCI_properties_file)"  Importance="high"/>
 	
-	<Error Condition="'$(buildNumber)' == ''" Text="Invalid Property: buildNumber, properties file: $(SQLCI_properties_file), global properties file: $(SQLCI_global_file). You must specify a build number and update the TFS build's .xaml file so the TFS parameters are passed to MsBuild. See Passing the $BuildNumber variable to MSBuild using TFS (www.red-gate.com/sqlci/tfs/buildnumber)"/>
-	<Error Condition="'$(package)' == ''" Text="Invalid Property: package, properties file: $(SQLCI_properties_file), global properties file: $(SQLCI_global_file). You must specify the SQLCI package you want to publish." />
-	<Error Condition="'$(sqlCIexe)' == ''" Text="Invalid Property: sqlCIexe, properties file: $(SQLCI_properties_file), global properties file: $(SQLCI_global_file). You must specify the path to the sqlCI.exe file installed with the Red Gate Automation Pack. The default install location is C:\Program Files (x86)\Red Gate\SQL Automation Pack 1\sqlCI\sqlCI.exe." />
-	<Error Condition="!Exists('$(sqlCIexe)')" Text="Invalid Property: sqlCIexe, properties file: $(SQLCI_properties_file), global properties file: $(SQLCI_global_file). The file $(sqlCIexe) does not exist or the path to the file is incorrect." />
-	
-	<Error Condition="'$(nugetFeedUrl)' == ''" Text="Invalid Property: nugetFeedUrl, properties file: $(SQLCI_properties_file), global properties file: $(SQLCI_global_file). You must specify the fully-qualified URL for your NuGet feed." />
-	
-    <Message Text="Starting: $(sqlCI)" />
-    
-	<Exec Command="$(sqlCI)"/>
+	<SQLCIPublish package="$(package)" 
+				nugetFeedApiKey="$(nugetFeedApiKey)" 
+				nugetFeedUrl="$(nugetFeedUrl)"
+				licenseSerialKey="$(licenseSerialKey)"
+				sendErrorReports="$(sendErrorReports)"/>
   </Target>
 </Project>

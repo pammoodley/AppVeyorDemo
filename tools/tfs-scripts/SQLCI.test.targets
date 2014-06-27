@@ -3,23 +3,8 @@
 
 	<Import Project="$(SQLCI_global_file)"/>  
     <Import Project="$(SQLCI_properties_file)"/>  
-	
-	<PropertyGroup>
-      <sqlCI_options>test</sqlCI_options>
-	  <sqlCI_options>$(sqlCI_options) /temporaryDatabaseServer="$(temporaryDatabaseServer)"</sqlCI_options>
-	  <sqlCI_options Condition="'$(temporaryDatabaseUserName)' != ''">$(sqlCI_options) /temporaryDatabaseUserName="$(temporaryDatabaseUserName)"</sqlCI_options>
-	  <sqlCI_options Condition="'$(temporaryDatabasePassword)' != ''">$(sqlCI_options) /temporaryDatabasePassword="$(temporaryDatabasePassword)"</sqlCI_options>
-	  <sqlCI_options>$(sqlCI_options) /package="$(package)"</sqlCI_options>
-	  <sqlCI_options Condition="'$(outputFolder)' != ''">$(sqlCI_options) /outputFolder="$(outputFolder)"</sqlCI_options>
-	  <sqlCI_options Condition="'$(licenseSerialKey)' != ''">$(sqlCI_options) /licenseSerialKey="$(licenseSerialKey)"</sqlCI_options>
-	  <sqlCI_options Condition="'$(licenseSerialKey)' != ''">$(sqlCI_options) /licenseSerialKey="$(licenseSerialKey)"</sqlCI_options>
-	  <sqlCI_options Condition="'$(generateTestData.ToUpper())' == 'TRUE'">$(sqlCI_options) /sqlDataGenerator</sqlCI_options>
-	  <sqlCI_options Condition="'$(generateTestData.ToUpper())' == 'TRUE' AND '$(dataGeneratorProjectFile)' != ''">$(sqlCI_options)="$(dataGeneratorProjectFile)"</sqlCI_options>
-	  <sqlCI_options Condition="'$(additionalCompareArgs)' != ''">$(sqlCI_options) /additionalCompareArgs="$(additionalCompareArgs)"</sqlCI_options>
-	  <sqlCI>set RUNNING_IN_MSBUILD=true &amp; "$(sqlCIexe)" $(sqlCI_options)</sqlCI>
-	  <sqlCI Condition="'$(sendErrorReports.ToUpper())' == 'TRUE'">set REDGATE_SEND_ERROR_REPORTS=true &amp; $(sqlCI)</sqlCI>
-	</PropertyGroup>
-	
+    <UsingTask TaskName="SQLCITest" AssemblyFile="$(sqlCIFolder)/sqlCI.exe"/>
+		
 	<Target Name="default">
 			<CallTarget Targets="sqlCI_test" Condition="'$(disabled.ToUpper())' != 'TRUE'"/>
 			<Message Text="Skipping $(SQLCI_properties_file): disabled is set to true." Condition="'$(disabled.ToUpper())' == 'TRUE'" Importance="high"/>
@@ -28,16 +13,16 @@
   <Target Name="sqlCI_test">
 	<Message Text="Running SQLCI test for properties file $(SQLCI_properties_file)"  Importance="high"/>
 	
-	<Error Condition="'$(temporaryDatabaseServer)' == ''" Text="Invalid Property: temporaryDatabaseServer, properties file: $(SQLCI_properties_file), global properties file: $(SQLCI_global_file). The SQL CI needs to recreate your database on a temporary database server. Enter the database server name." />
-	<Error Condition="'$(buildNumber)' == ''" Text="Invalid Property: buildNumber, properties file: $(SQLCI_properties_file), global properties file: $(SQLCI_global_file). You must specify a build number and update the TFS build's .xaml file so the TFS parameters are passed to MsBuild. See Passing the $BuildNumber variable to MSBuild using TFS (www.red-gate.com/sqlci/tfs/buildnumber)"/>
-	
-	<Error Condition="'$(package)' == ''" Text="Invalid Property: package, properties file: $(SQLCI_properties_file), global properties file: $(SQLCI_global_file). You must specify the SQLCI package you want to test." />
-	<Error Condition="'$(sqlCIexe)' == ''" Text="Invalid Property: sqlCIexe, properties file: $(SQLCI_properties_file), global properties file: $(SQLCI_global_file). You must specify the path to the sqlCI.exe file installed with the Red Gate Automation Pack. The default install location is C:\Program Files (x86)\Red Gate\SQL Automation Pack 1\sqlCI\sqlCI.exe." />
-	<Error Condition="!Exists('$(sqlCIexe)')" Text="Invalid Property: sqlCIexe, properties file: $(SQLCI_properties_file), global properties file: $(SQLCI_global_file). The file $(sqlCIexe) does not exist or the path to the file is incorrect." />
-	
-	
-    <Message Text="Starting: $(sqlCI)" />
-    
-	<Exec Command="$(sqlCI)"/>
+	<SQLCITest package="$(package)" 
+				temporaryDatabaseServer="$(temporaryDatabaseServer)" 
+				temporaryDatabaseUserName="$(temporaryDatabaseUserName)"
+				temporaryDatabasePassword="$(temporaryDatabasePassword)"
+				outputFolder="$(outputFolder)"
+				generateTestData="$(generateTestData)"
+				dataGeneratorProjectFile="$(dataGeneratorProjectFile)"
+				runOnly="$(runOnly)"
+				additionalCompareArgs="$(additionalCompareArgs)"
+				licenseSerialKey="$(licenseSerialKey)"
+				sendErrorReports="$(sendErrorReports)"/>
   </Target>
 </Project>
