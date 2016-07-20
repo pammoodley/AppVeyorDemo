@@ -163,7 +163,7 @@ BEGIN
 	EXEC dbo.pr_OrderByScore 'GoodData.txt'
 
 	SET @ExecSQL = 'BULK INSERT #Actual 
-                    FROM ''C:\projects\appveyordemo\database\scriptsfolder\stored procedure\GoodData-graded.txt''
+                    FROM ''C:\projects\appveyordemo\database\scriptsfolder\stored procedures\GoodData-graded.txt''
                     WITH 
                     ( CODEPAGE = ''1252'',
                       FIELDTERMINATOR = '','' 
@@ -206,7 +206,7 @@ BEGIN
 	EXEC dbo.pr_OrderByScore 'DecimalData.txt'
 
 	SET @ExecSQL = 'BULK INSERT #Actual 
-                    FROM ''C:/projects/appveyordemo/database/scriptsfolder/stored procedure/DecimalData-graded.txt''
+                    FROM ''C:/projects/appveyordemo/database/scriptsfolder/stored procedures/DecimalData-graded.txt''
                     WITH 
                     (
                       FIELDTERMINATOR = '','' 
