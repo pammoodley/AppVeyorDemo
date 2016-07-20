@@ -163,7 +163,7 @@ BEGIN
 	EXEC dbo.pr_OrderByScore 'GoodData.txt'
 
 	SET @ExecSQL = 'BULK INSERT #Actual 
-                    FROM ''GoodData-graded.txt''
+                    FROM ''C:\projects\appveyordemo\database\scriptsfolder\stored procedure\GoodData-graded.txt''
                     WITH 
                     (
                       FIELDTERMINATOR = '','' 
