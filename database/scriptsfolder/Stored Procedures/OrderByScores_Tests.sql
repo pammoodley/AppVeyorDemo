@@ -165,7 +165,7 @@ BEGIN
 	SET @ExecSQL = 'BULK INSERT #Actual 
                     FROM ''C:\projects\appveyordemo\database\scriptsfolder\stored procedure\GoodData-graded.txt''
                     WITH 
-                    (
+                    ( CODEPAGE = ''1252'',
                       FIELDTERMINATOR = '','' 
                     ) ;
                    ';
