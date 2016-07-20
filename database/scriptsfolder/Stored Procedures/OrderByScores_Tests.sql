@@ -160,10 +160,10 @@ BEGIN
 		 ,('SMITH', ' ALLAN'  , 70)
          
 
-	EXEC dbo.pr_OrderByScore '\TestFiles\GoodData.txt'
+	EXEC dbo.pr_OrderByScore 'GoodData.txt'
 
 	SET @ExecSQL = 'BULK INSERT #Actual 
-                    FROM ''\TestFiles\GoodData-graded.txt''
+                    FROM ''GoodData-graded.txt''
                     WITH 
                     (
                       FIELDTERMINATOR = '','' 
@@ -203,10 +203,10 @@ BEGIN
 		 ,('BUND', ' ALLAN'  , 70.1)
          
 
-	EXEC dbo.pr_OrderByScore 'C:\Assessment\TestFiles\DecimalData.txt'
+	EXEC dbo.pr_OrderByScore 'DecimalData.txt'
 
 	SET @ExecSQL = 'BULK INSERT #Actual 
-                    FROM ''C:\Assessment\TestFiles\DecimalData-graded.txt''
+                    FROM ''DecimalData-graded.txt''
                     WITH 
                     (
                       FIELDTERMINATOR = '','' 
@@ -248,10 +248,10 @@ BEGIN
 
          
 
-	EXEC dbo.pr_OrderByScore 'C:\Assessment\TestFiles\MissingNameData.txt'
+	EXEC dbo.pr_OrderByScore 'MissingNameData.txt'
 
 	SET @ExecSQL = 'BULK INSERT #Actual 
-                    FROM ''C:\Assessment\TestFiles\MissingNameData-graded.txt''
+                    FROM ''MissingNameData-graded.txt''
                     WITH 
                     (
                       FIELDTERMINATOR = '','' 
@@ -310,10 +310,10 @@ BEGIN
          ,('SMITHpp', ' FRANCI''S', 11)   
          ,('SMITHuu', ' FRANCI''S', 11)
 
-	EXEC dbo.pr_OrderByScore 'C:\Assessment\TestFiles\LongNameData.txt'
+	EXEC dbo.pr_OrderByScore 'LongNameData.txt'
 
 	SET @ExecSQL = 'BULK INSERT #Actual 
-                    FROM ''C:\Assessment\TestFiles\LongNameData-graded.txt''
+                    FROM ''LongNameData-graded.txt''
                     WITH 
                     (
                       FIELDTERMINATOR = '','' 
