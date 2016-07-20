@@ -118,14 +118,14 @@ BEGIN
 
 	-- remove the file if it exists
 	EXEC @Result = sp_OACreate 'Scripting.FileSystemObject', @FSO_Token OUTPUT
-	EXEC @Result = sp_OAMethod @FSO_Token, 'DeleteFile', NULL, 'C:\Assessment\TestFiles\TestFileName-graded.txt'
+	EXEC @Result = sp_OAMethod @FSO_Token, 'DeleteFile', NULL, '..\TestFiles\TestFileName-graded.txt'
 	EXEC @Result = sp_OADestroy @FSO_Token
 
 	-- Act
-	EXEC @Actual = dbo.pr_OrderByScore 'C:\Assessment\TestFiles\TestFileName.txt'
+	EXEC @Actual = dbo.pr_OrderByScore '..\TestFiles\TestFileName.txt'
 
 	-- check if the file exists
-     EXEC master.dbo.xp_fileexist 'C:\Assessment\TestFiles\TestFileName-graded.txt', @Actual OUTPUT
+     EXEC master.dbo.xp_fileexist '..\TestFiles\TestFileName-graded.txt', @Actual OUTPUT
      select  cast(@Actual as bit)
 
 	-- Assert
@@ -160,10 +160,10 @@ BEGIN
 		 ,('SMITH', ' ALLAN'  , 70)
          
 
-	EXEC dbo.pr_OrderByScore 'C:\Assessment\TestFiles\GoodData.txt'
+	EXEC dbo.pr_OrderByScore '..\TestFiles\GoodData.txt'
 
 	SET @ExecSQL = 'BULK INSERT #Actual 
-                    FROM ''C:\Assessment\TestFiles\GoodData-graded.txt''
+                    FROM ''..\TestFiles\GoodData-graded.txt''
                     WITH 
                     (
                       FIELDTERMINATOR = '','' 
