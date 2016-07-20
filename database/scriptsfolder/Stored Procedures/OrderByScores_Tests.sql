@@ -160,10 +160,10 @@ BEGIN
 		 ,('SMITH', ' ALLAN'  , 70)
          
 
-	EXEC dbo.pr_OrderByScore '..\TestFiles\GoodData.txt'
+	EXEC dbo.pr_OrderByScore '\TestFiles\GoodData.txt'
 
 	SET @ExecSQL = 'BULK INSERT #Actual 
-                    FROM ''..\TestFiles\GoodData-graded.txt''
+                    FROM ''\TestFiles\GoodData-graded.txt''
                     WITH 
                     (
                       FIELDTERMINATOR = '','' 
