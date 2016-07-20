@@ -15,7 +15,6 @@ BEGIN
   DECLARE @LastName  NVARCHAR(500)
   DECLARE @Processed BIT
   DECLARE @StringScore NVARCHAR(256)
-  --DECLARE @Score     INT -- can it be float?
   DECLARE @WriteFile NVARCHAR(MAX)             
   DECLARE @WriteToFile NVARCHAR(256)
   DECLARE @ExecSQL NVARCHAR(MAX)
@@ -36,7 +35,6 @@ BEGIN
     Lastname NVARCHAR(MAX)
    ,Firstname NVARCHAR(MAX)
    ,Score NVARCHAR(100)  
-  --, ID        INT IDENTITY     /*uniquely identify a record, incase of duplicate names or scores*/
   )
 
   -- CREATE the file name for the results '-graded'
@@ -60,7 +58,7 @@ BEGIN
 
   EXECUTE sp_executesql @ExecSQL;
 
-  -- add an identity column to uniquely identify a row
+  -- add an identity column to uniquely identify a record, incase of duplicate names or scores
   ALTER TABLE #ScoreData
   ADD ID INT IDENTITY
 
@@ -81,31 +79,31 @@ BEGIN
   WHILE @@ROWCOUNT = 1
   BEGIN
 
--- write to file
---select ISNULL(@LastName,'') + ', ' + ISNULL(@FirstName,'') + ', ' + @StringScore
-SELECT @WriteFile = ISNULL(@LastName,'') + ', ' + ISNULL(@FirstName,'') + ', ' + @StringScore
-EXEC  WriteToFile  @WriteToFile, @WriteFile 
+    -- write to file
+    SELECT @WriteFile = ISNULL(@LastName,'') + ', ' + ISNULL(@FirstName,'') + ', ' + @StringScore
+    EXEC  WriteToFile  @WriteToFile, @WriteFile 
 
-UPDATE #ScoreData
-   SET Processed =1
- WHERE ID = @Id
+    UPDATE #ScoreData
+       SET Processed =1
+     WHERE ID = @Id
 
-SELECT TOP 1 @FirstName = LTRIM(Firstname)
-            ,@LastName  = LTRIM(LastName)
-			,@StringScore = LTRIM(Score)
-			,@Id        = Id
-  FROM #ScoreData
- WHERE ISNULL(Processed,0) = 0
- ORDER BY Score DESC
-        ,LastName DESC
-		,FirstName DESC;
-END
+    SELECT TOP 1 @FirstName = LTRIM(Firstname)
+                ,@LastName  = LTRIM(LastName)
+                ,@StringScore = LTRIM(Score)
+                ,@Id        = Id
+      FROM #ScoreData
+     WHERE ISNULL(Processed,0) = 0
+     ORDER BY Score DESC
+            ,LastName DESC
+		    ,FirstName DESC;
+  END -- end while @@rowcount =1
 
 END TRY 
 BEGIN CATCH
   SET @ErrorMessage = ERROR_MESSAGE();
   SET @ErrorCode = ERROR_NUMBER();
 
+  -- if file not found throw a specific error
   IF @ErrorCode = 4860
     RETURN 1
 
@@ -115,6 +113,5 @@ BEGIN CATCH
 
 END CATCH
 END
-
 
 GO
