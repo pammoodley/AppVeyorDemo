@@ -118,14 +118,14 @@ BEGIN
 
 	-- remove the file if it exists
 	EXEC @Result = sp_OACreate 'Scripting.FileSystemObject', @FSO_Token OUTPUT
-	EXEC @Result = sp_OAMethod @FSO_Token, 'DeleteFile', NULL, '..\TestFiles\TestFileName-graded.txt'
+	EXEC @Result = sp_OAMethod @FSO_Token, 'DeleteFile', NULL, 'TestFileName-graded.txt'
 	EXEC @Result = sp_OADestroy @FSO_Token
 
 	-- Act
-	EXEC @Actual = dbo.pr_OrderByScore '..\TestFiles\TestFileName.txt'
+	EXEC @Actual = dbo.pr_OrderByScore 'TestFileName.txt'
 
 	-- check if the file exists
-     EXEC master.dbo.xp_fileexist '..\TestFiles\TestFileName-graded.txt', @Actual OUTPUT
+     EXEC master.dbo.xp_fileexist 'TestFileName-graded.txt', @Actual OUTPUT
      select  cast(@Actual as bit)
 
 	-- Assert
