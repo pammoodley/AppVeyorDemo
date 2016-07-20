@@ -4,7 +4,7 @@ $pause = 10; # Seconds to wait between tries
 While ($tries -gt 0) {
   try {
 
-    $ServerConnectionString = "Data Source=(local)\SQL2014;Initial Catalog=master;User Id=sa;PWD=password1234$";
+    $ServerConnectionString = "Data Source=(local)\SQL2014;Initial Catalog=master;User Id=sa;PWD=password12!";
     $ServerConnection = new-object system.data.SqlClient.SqlConnection($ServerConnectionString);
 
 
