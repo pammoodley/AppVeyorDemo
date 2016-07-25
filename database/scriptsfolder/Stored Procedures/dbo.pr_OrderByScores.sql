@@ -81,6 +81,7 @@ BEGIN
 
     -- write to file
     SELECT @WriteFile = ISNULL(@LastName,'') + ', ' + ISNULL(@FirstName,'') + ', ' + @StringScore
+    print @WriteFile
     EXEC  WriteToFile  @WriteToFile, @WriteFile 
 
     UPDATE #ScoreData
